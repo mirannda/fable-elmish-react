@@ -1,7 +1,7 @@
 module Home.State
 
 open Elmish
-open Home.Types
+open Types
 
 let init () : Model * Cmd<Msg> =
   "", []

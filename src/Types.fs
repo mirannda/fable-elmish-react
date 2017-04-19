@@ -1,6 +1,5 @@
 module App.Types
 
-
 open Global
 
 type Msg =

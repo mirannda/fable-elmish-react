@@ -1,11 +1,11 @@
-module State.App
+module App.State
 
 open Elmish
 open Elmish.Browser.Navigation
 open Elmish.Browser.UrlParser
 open Fable.Import.Browser
 open Global
-open App.Types
+open Types
 
 let pageParser: Parser<Page->Page,Page> =
   oneOf [

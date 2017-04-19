@@ -1,10 +1,7 @@
-module About.Views
+module Info.View
 
 open Fable.Helpers.React
 open Fable.Helpers.React.Props
-
-
-
 
 let root =
   div
@@ -14,5 +11,4 @@ let root =
         [ str "About page" ]
       p
         [ ]
-        [ str "page" ]
-    ]
+        [ str "This template is a simple application build with Fable + Elmish + React." ] ]
