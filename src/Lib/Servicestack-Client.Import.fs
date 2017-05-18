@@ -230,7 +230,7 @@ and [<AllowNullLiteral>] [<Import("*","GetAccessTokenResponse")>] GetAccessToken
     member __.accessToken with get(): string = jsNative and set(v: string): unit = jsNative
     member __.responseStatus with get(): ResponseStatus = jsNative and set(v: ResponseStatus): unit = jsNative
 
-and [<AllowNullLiteral>] [<Import("*","JsonServiceClient")>] JsonServiceClient(baseUrl: string) =
+and [<AllowNullLiteral>] [<Import("JsonServiceClient","servicestack-client")>] JsonServiceClient(baseUrl: string) =
     member __.baseUrl with get(): string = jsNative and set(v: string): unit = jsNative
     member __.replyBaseUrl with get(): string = jsNative and set(v: string): unit = jsNative
     member __.oneWayBaseUrl with get(): string = jsNative and set(v: string): unit = jsNative
