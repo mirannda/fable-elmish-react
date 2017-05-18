@@ -3,6 +3,9 @@
     <TargetFramework>netstandard1.6</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <!--Lib-->
+    <Compile Include="src/Lib/Servicestack-Client.Import.fs" />
+    <Compile Include="src/Lib/Todo.Import.fs" />
     <!-- Global to the app -->
     <Compile Include="src/Global.fs" />
     <!-- Info -->
@@ -17,6 +20,10 @@
     <Compile Include="src/Home/View.fs" />
     <!-- Navbar -->
     <Compile Include="src/Navbar/View.fs" />
+    <!--Todo-->
+    <Compile Include="src/Todo/Types.fs" />
+    <Compile Include="src/Todo/State.fs" />
+    <Compile Include="src/Todo/View.fs" />
     <!-- App -->
     <Compile Include="src/Types.fs" />
     <Compile Include="src/State.fs" />
