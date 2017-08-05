@@ -11,6 +11,7 @@ open Fable.Import.Servicestack
 // and [<AllowNullLiteral>] IReturn<'T> =
 //     interface end
 
+//TODO
 [<CLIMutable>]
 type ToDo =
     { Id : int
@@ -19,19 +20,11 @@ type ToDo =
       Status : string }
 
 [<CLIMutable>]
-type ToDoList =
-    {
-        ToDos : ToDo[]}
+type ToDoList = ToDo []
+
+type ToDoByUser() = class end with interface IReturn<ToDoList>
 
 [<CLIMutable>]
-type ToDoByUser = {
-    Id : int
-} with interface IReturn<ToDoList>
-
-
-
-[<CLIMutable>]
-
 type AddToDo = {
     Order : int
     Content : string
@@ -49,7 +42,12 @@ type UpdateToDo = {
 [<CLIMutable>]
 type DeleteToDo = {
     Id:int
-} with interface IReturnVoid
+} with interface IReturn<DeleteToDo>
+
+module CommonHelper =
+  let baseUrl = "http://sometodourl"
+
+  let client = JsonServiceClient(baseUrl)
 
 
 

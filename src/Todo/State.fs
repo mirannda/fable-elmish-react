@@ -7,44 +7,64 @@ open Fable.Import
 open Fable.Import.Browser
 open Fable.Import.Servicestack
 open Fable.Import.TheMedico
-open Fable.PowerPack
-open Fable.PowerPack.Fetch.Fetch_types
-let initPull (data: ToDoByUser)=
-        // let client = JsonServiceClient("http://themedico.foo/")
-        promise {
-            let url = "http://sometodourl/todo"
-            let todobyuser = data :> IReturn<ToDoList>
-            // Below commented part work with Fable powerpack fetch works
-            // let props = [Fetch.requestHeaders [ HttpRequestHeaders.ContentType "application/json" ]]
-            // let! result = Fetch.fetchAs<ToDoList> (url + "/?Id=" + todobyuser.Id.ToString()) props
-            // printfn "%A" result.ToDos.Length
-            let client = JsonServiceClient("http://sometodourl/todo")
-            let! result = client.get(U2.Case1 todobyuser)
-            return result
-        }
-let initCmd data=
-    Cmd.ofPromise initPull data (unbox FetchTodo) FetchError
+
+open CommonHelper
 
 
 let init () : Model * Cmd<Msg> =
     console.log "Todo Init"
-    newModel, initCmd {Id = 1}
+    let initPull (data: ToDoByUser) =
+        client.get (U2.Case1 (data :> IReturn<ToDoList>))
+    let initCmd data=
+        Cmd.ofPromise initPull data ListFetched FetchError
+    in
+    newModel, initCmd (ToDoByUser())
 
 
 let update msg model : Model * Cmd<Msg> =
     match msg with
+    | Change t ->
+        {model with Entry = t}, Cmd.none
     | Add t ->
-        console.log "Add is happending"
-        newModel, []
+        console.log "Add is happenning"
+        let add t = client.post (t :> IReturn<ToDo>)
+        let addCmd t = Cmd.ofPromise add t InsertOrUpdated FetchError
+        in
+        model, addCmd t
     | Update t ->
+        console.log "Update is happenning"
+        let update t = client.put (t :> IReturn<ToDo>)
+        let updateCmd t = Cmd.ofPromise update t InsertOrUpdated FetchError
+        in
+        model, updateCmd t
+    | Delete t ->
+        printfn "%A" t.Id
+        let delete' (t:DeleteToDo) = client.delete (U2.Case1 (t :> IReturn<DeleteToDo>))
+        let deleteCmd t = Cmd.ofPromise delete' t Deleted FetchError
+        in
+        model, deleteCmd t
+    | ListFetched data ->
+        {model with Entries = data |> Array.toList } , Cmd.none
+    | InsertOrUpdated data ->
+        let found = model.Entries |> List.tryFind(fun x -> x.Id = data.Id)
+        let newlist =
+            match found with
+            | Some x ->
+                model.Entries |> List.map (fun a -> if a.Id = x.Id then data else a)
+            | None ->
+                data::model.Entries
+        in
+        {model with Entries = newlist}, Cmd.none
+    | Deleted data ->
+        let found = model.Entries |> List.tryFind(fun x -> x.Id = data.Id)
+        let newlist =
+            match found with
+            | Some x ->
 
-        newModel, []
-    | Delete id ->
-        newModel, []
-    | FetchTodo data ->
-        printfn "%A" "fetchtodo data"
-        printfn "%A" data
-        newModel, Cmd.none
+                model.Entries |> List.filter (fun a -> a.Id <> x.Id )
+            | None -> model.Entries
+        in
+        {model with Entries = newlist}, Cmd.none
     | FetchError exn ->
         printfn "%A" exn
         model, Cmd.none
