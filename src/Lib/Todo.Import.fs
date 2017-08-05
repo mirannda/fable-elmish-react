@@ -30,8 +30,8 @@ type ToDo =
 [<CLIMutable>]
 type ToDoList = ToDo []
 
-type ToDoByUser() =
-  member __.getTypeName() = typeof<ToDoByUser>.Name
+type ToDoByUser() as this=
+  member __.getTypeName() = this.GetType().Name //typeof<ToDoByUser>.Name
 with interface IReturn<ToDoList>
 
 [<CLIMutable>]
