@@ -2,9 +2,17 @@ namespace Fable.Import.TheMedico
 open System
 open System.Text.RegularExpressions
 open Fable.Core
-open Fable.Import.JS
+// open Fable.Import.JS
 open Fable.Import.Servicestack
+open FSharp.Core
 
+
+
+module CommonHelper =
+
+  let baseUrl = "http://sometodourl"
+
+  let client = JsonServiceClient(baseUrl)
 // type [<AllowNullLiteral>] IReturnVoid =
 //     interface end
 
@@ -22,7 +30,9 @@ type ToDo =
 [<CLIMutable>]
 type ToDoList = ToDo []
 
-type ToDoByUser() = class end with interface IReturn<ToDoList>
+type ToDoByUser() =
+  member __.getTypeName() = typeof<ToDoByUser>.Name
+with interface IReturn<ToDoList>
 
 [<CLIMutable>]
 type AddToDo = {
@@ -44,10 +54,7 @@ type DeleteToDo = {
     Id:int
 } with interface IReturn<DeleteToDo>
 
-module CommonHelper =
-  let baseUrl = "http://sometodourl"
 
-  let client = JsonServiceClient(baseUrl)
 
 
 
